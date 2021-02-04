@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--        fx:controller="pro.soft.view.RootLayout"-->
+
+<BorderPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pro.soft.view.RootLayoutController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="操作">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#handleSelectInterface" text="选择监听网卡" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleStartCapture" text="开始抓包" />
+                  <MenuItem fx:id="stopCapture" mnemonicParsing="false" onAction="#handleStopCapture" text="停止抓包" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="统计结果">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#handleCreateBarChart" text="显示统计表" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="帮助">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+</BorderPane>
