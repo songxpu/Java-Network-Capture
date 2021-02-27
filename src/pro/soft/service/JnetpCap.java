@@ -14,6 +14,8 @@ public class JnetpCap {
     private PcapIf currentPcpIf;//当前网卡对象
     private List<PcapIf> alldevsList;//所有网卡对象列表
 
+    private Pcap pcap;//当前打开的网卡，用于保存流量包
+
     //单例模式
     private static JnetpCap instance = new JnetpCap();
     public static JnetpCap getInstance(){
@@ -66,6 +68,14 @@ public class JnetpCap {
         this.currentPcpIf = null;
     }
 
-
+    public void setPcap(Pcap pcap){
+        this.pcap = pcap;
+    }
+    public Pcap getPcap(){
+        return pcap;
+    }
+    public void delPcap(){
+        pcap.close();
+    }
 
 }

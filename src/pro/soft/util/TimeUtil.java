@@ -9,4 +9,9 @@ public class TimeUtil {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return formatter.format(date);
     }
+    public static String getLocalTimeForFile(){
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+        return formatter.format(date);
+    }
 }

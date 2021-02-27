@@ -15,7 +15,7 @@
       <HBox layoutX="224.0" layoutY="32.0" spacing="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children> 
             <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
-            <TextField layoutX="224.0" layoutY="32.0" prefHeight="30.0" prefWidth="622.0" promptText="应用过滤器">
+            <TextField fx:id="filter_text" layoutX="224.0" layoutY="32.0" prefHeight="30.0" prefWidth="622.0" promptText="应用过滤器">
                <HBox.margin>
                   <Insets top="7.5" />
                </HBox.margin>
@@ -23,10 +23,15 @@
                   <Font size="14.0" />
                </font>
             </TextField>
-            <Button layoutX="531.0" layoutY="32.0" mnemonicParsing="false" text="开始过滤">
-               <HBox.margin>
-                  <Insets top="10.0" />
-               </HBox.margin>
+            <Button fx:id="Start_filter" layoutX="531.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleFilter" prefHeight="25.0" prefWidth="80.0" text="开始过滤" wrapText="true">
+                <HBox.margin>
+                    <Insets top="10.0" />
+                </HBox.margin>
+            </Button>
+            <Button fx:id="reset_filter" layoutX="560.0" layoutY="32.0" onAction="#handleReset" prefHeight="25.0" prefWidth="70.0" text="重 置">
+                <HBox.margin>
+                    <Insets top="10.0" />
+                </HBox.margin>
             </Button>
             <Label fx:id="nowpcapLabel" layoutX="881.0" layoutY="11.0" prefHeight="47.0" prefWidth="181.0" text="当前未选择网卡" />
          </children>

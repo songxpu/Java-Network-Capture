@@ -14,6 +14,8 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.jnetpcap.packet.PcapPacket;
+import org.jnetpcap.protocol.tcpip.Http;
+import org.jnetpcap.protocol.tcpip.Tcp;
 import pro.soft.model.BarChartModel;
 import pro.soft.model.CurPcapLabelModel;
 import pro.soft.model.PacketColumnModel;
@@ -78,6 +80,11 @@ public class MainLayoutController implements Initializable {
     //Service层
     private static PacketCaptureService packetCaptureService=new PacketCaptureService(packetTableModel);
     private static BarChartModel barChartModel;
+//    "开始过滤"按钮
+    @FXML
+    private Button Start_filter;
+    @FXML
+    private TextField filter_text;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -177,9 +184,11 @@ public class MainLayoutController implements Initializable {
 
     //配置协议树
     private TreeItem configTreeView(PcapPacket pcapPacket){
+        //根节点
         TreeItem rootItem = new TreeItem<>("协议结构");
         rootItem.setExpanded(true);
 
+        //链路层
         TreeItem treeItem = new TreeItem<>("以太网链路层");
         treeItem.setExpanded(true);
         //
@@ -193,7 +202,7 @@ public class MainLayoutController implements Initializable {
         treeItem.getChildren().add(item_srcmac);
         treeItem.getChildren().add(item_descmac);
 
-
+        //网络层
         TreeItem treeItem2 = new TreeItem<>("网络层");
         treeItem2.setExpanded(true);
         //
@@ -211,40 +220,91 @@ public class MainLayoutController implements Initializable {
         treeItem2.getChildren().add(item_type);
         treeItem2.getChildren().add(item_srcip);
         treeItem2.getChildren().add(item_descip);
-
+        //传输层
         TreeItem treeItem3 = new TreeItem<>("传输层");
         treeItem3.setExpanded(true);
-        //
-        TreeItem item_proto = new TreeItem<>("协议");
-        item_proto.getChildren().add(new TreeItem<>(PacketProcess.getProtocol(pcapPacket)));
-        item_proto.setExpanded(true);
-        //
         TreeItem item_srcport = new TreeItem<>("源端口");
         item_srcport.getChildren().add(new TreeItem<>(PacketProcess.getSrcPort(pcapPacket)));
         item_srcport.setExpanded(true);
-        //desc
         TreeItem item_descport = new TreeItem<>("目的端口");
         item_descport.getChildren().add(new TreeItem<>(PacketProcess.getDesPort(pcapPacket)));
         item_descport.setExpanded(true);
+        TreeItem item_seqnum = new TreeItem<>("序号");
+        item_seqnum.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Tcp()).seq()));
+        item_seqnum.setExpanded(true);
+        TreeItem item_acknum = new TreeItem<>("确认号");
+        item_acknum.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Tcp()).ack()));
+        item_acknum.setExpanded(true);
+        TreeItem item_headerlen = new TreeItem<>("头部长度");
+        item_headerlen.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Tcp()).getLength()));
+        item_headerlen.setExpanded(true);
 
-        treeItem3.getChildren().add(item_proto);
+        TreeItem item_flags = new TreeItem<>("标志");
+        TreeItem item_urgflags = new TreeItem<>("URG");
+        item_urgflags.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Tcp()).flags_URG()));
+        item_urgflags.setExpanded(true);
+        item_flags.setExpanded(true);
+        TreeItem item_ackflags = new TreeItem<>("ACK");
+        item_ackflags.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Tcp()).flags_ACK()));
+        item_ackflags.setExpanded(true);
+        TreeItem item_rstflags = new TreeItem<>("RST");
+        item_rstflags.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Tcp()).flags_RST()));
+        item_rstflags.setExpanded(true);
+        TreeItem item_synflags = new TreeItem<>("SYN");
+        item_synflags.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Tcp()).flags_SYN()));
+        item_synflags.setExpanded(true);
+        TreeItem item_finflags = new TreeItem<>("FIN");
+        item_finflags.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Tcp()).flags_FIN()));
+        item_finflags.setExpanded(true);
+        item_flags.getChildren().addAll(item_urgflags,item_ackflags,item_rstflags,item_synflags,item_finflags);
+
+        TreeItem item_windows = new TreeItem<>("窗口");
+        item_windows.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Tcp()).window()));
+        item_windows.setExpanded(true);
+
+        TreeItem item_checknum = new TreeItem<>("校验和");
+        item_checknum.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Tcp()).checksum()));
+        item_checknum.setExpanded(true);
+
         treeItem3.getChildren().add(item_srcport);
         treeItem3.getChildren().add(item_descport);
+        treeItem3.getChildren().add(item_seqnum);
+        treeItem3.getChildren().add(item_acknum);
+        treeItem3.getChildren().add(item_headerlen);
+        treeItem3.getChildren().add(item_flags);
+        treeItem3.getChildren().add(item_windows);
+        treeItem3.getChildren().add(item_checknum);
 
+        //应用层
         TreeItem treeItem4 = new TreeItem<>("应用层");
         treeItem4.setExpanded(true);
-        //
-//        TreeItem item_proto = new TreeItem<>("协议");
-//        item_proto.getChildren().add(new TreeItem<>(PacketProcess.getProtocol(pcapPacket)));
-//        item_proto.setExpanded(true);
+        if (pcapPacket.getHeader(new Http())!=null) {
+            TreeItem item_header = new TreeItem<>("首部长度");
+            item_header.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Http()).getHeaderLength()));
+            item_header.setExpanded(true);
+            treeItem4.getChildren().addAll(item_header);
+        }
+
 
         rootItem.getChildren().add(treeItem);
         rootItem.getChildren().add(treeItem2);
         rootItem.getChildren().add(treeItem3);
         rootItem.getChildren().add(treeItem4);
+
         return rootItem;
     }
+    @FXML
+    private void handleFilter(){
+        System.out.println("开始过滤");
+//        System.out.println(filter_text.getText()); //获取textFiled的值
+        packetCaptureService.handleFilter(filter_text.getText());
 
+    }
+    @FXML
+    private void handleReset(){
+        System.out.println("开始重置");
+        packetCaptureService.handleReset();
+    }
 
 
 

@@ -57,7 +57,6 @@ public class DialogSelectInterfaceController implements Initializable {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                System.out.println("多线程：显示选择栏中内容");
                 alldevs = JnetpCap.getInstance().getAllInterface();//获取所有网络接口存入List<PcapIf> alldevs;中
                 choiceBox.setItems(FXCollections.observableArrayList(JnetpCap.changeToSimple(alldevs)));
                 if (alldevs.size()!=0){ hasGotAll = true; }
@@ -147,4 +146,7 @@ public class DialogSelectInterfaceController implements Initializable {
         treeItem.getChildren().add(item_address);
         return treeItem;
     }
+
+
+
 }

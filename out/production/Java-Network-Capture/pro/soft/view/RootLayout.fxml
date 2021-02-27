@@ -19,11 +19,12 @@
           <Menu mnemonicParsing="false" text="统计结果">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#handleCreateBarChart" text="显示统计表" />
+              <MenuItem mnemonicParsing="false" onAction="#filestore" text="保存" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="帮助">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem mnemonicParsing="false" onAction="#handleAbout" text="关于" />
             </items>
           </Menu>
         </menus>
