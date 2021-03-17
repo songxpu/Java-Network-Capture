@@ -7,6 +7,7 @@ import org.jnetpcap.protocol.lan.Ethernet;
 import org.jnetpcap.protocol.network.Icmp;
 import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.network.Ip6;
+import org.jnetpcap.protocol.tcpip.Http;
 import org.jnetpcap.protocol.tcpip.Tcp;
 import org.jnetpcap.protocol.tcpip.Udp;
 
@@ -87,5 +88,19 @@ public class PacketProcess {
         return packet.size();
     }
 
+    //获取HTTP数据包中的内容
+    public static String getHttpContens(PcapPacket packet){
+        Http http = new Http();
+        packet.getHeader(http);
+        return new String(http.getPayload());
+    }
+    //获取TCP数据包中payload部分内容，eg：FTP协议
+    public static String getTcpContents(PcapPacket packet){
+        Tcp tcp = new Tcp();
+        packet.getHeader(tcp);
+        if(tcp.getPayloadLength()>0)
+            return new String(tcp.getPayload());
+        return "NULL";
+    }
 
 }

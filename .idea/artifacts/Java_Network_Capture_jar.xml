@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Java-Network-Capture:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Java_Network_Capture_jar</output-path>
+    <root id="archive" name="Java-Network-Capture.jar">
+      <element id="module-output" name="Java-Network-Capture" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jnetpcap-1.4.r1425-1g.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

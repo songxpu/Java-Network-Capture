@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+       <VBox layoutX="10.0" layoutY="56.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="50.0">
+           <children>
+               <Label layoutX="10.0" layoutY="56.0" text="数据包列表">
+                   <VBox.margin>
+                       <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                   </VBox.margin>
+               </Label>
+               <TableView fx:id="mainTable" layoutX="14.0" layoutY="166.0" prefHeight="280.0" AnchorPane.bottomAnchor="250.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="80.0">
+                   <columns>
+                       <TableColumn id="id" fx:id="table_id" prefWidth="50.0" text="顺序号" />
+                       <TableColumn id="time" fx:id="table_time" minWidth="-1.0" text="捕获时间" />
+                       <TableColumn id="length" fx:id="table_length" prefWidth="60.0" text="包长度" />
+                       <TableColumn id="protocol" fx:id="table_protocol" prefWidth="40.0" text="协议" />
+                       <TableColumn id="srcMac" fx:id="table_srcmac" prefWidth="120.0" text="源MAC地址" />
+                       <TableColumn id="desMac" fx:id="table_desmac" prefWidth="120.0" text="目的MAC地址" />
+                       <TableColumn id="srcIp" fx:id="table_srcip" prefWidth="100.0" text="源IP地址" />
+                       <TableColumn id="desIp" fx:id="table_desip" prefWidth="100.0" text="目的IP地址" />
+                       <TableColumn id="srcport" fx:id="table_srcport" prefWidth="60.0" text="源端口" />
+                       <TableColumn id="desport" fx:id="table_desport" prefWidth="60.0" text="目的端口" />
+                   </columns>
+               </TableView>
+           </children>
+       </VBox>
+   </center>
+</BorderPane>

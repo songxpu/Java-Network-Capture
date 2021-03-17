@@ -11,20 +11,23 @@
         <menus>
           <Menu mnemonicParsing="false" text="操作">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#handleSelectInterface" text="选择监听网卡" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleStartCapture" text="开始抓包" />
-                  <MenuItem fx:id="stopCapture" mnemonicParsing="false" onAction="#handleStopCapture" text="停止抓包" />
+                <MenuItem mnemonicParsing="false" onAction="#InputPacket" text="导入数据包" />
+                <MenuItem mnemonicParsing="false" onAction="#handleSelectInterface" text="选择监听网卡" />
+                  <MenuItem fx:id="startCapture" disable="false" mnemonicParsing="false" onAction="#handleStartCapture" text="开始抓包" />
+                  <MenuItem fx:id="stopCapture" disable="false" mnemonicParsing="false" onAction="#handleStopCapture" text="停止抓包" />
+
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="统计结果">
+          <Menu mnemonicParsing="false" text="统计分析">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#handleCreateBarChart" text="显示统计表" />
-              <MenuItem mnemonicParsing="false" onAction="#filestore" text="保存" />
+              <MenuItem mnemonicParsing="false" fx:id="storeFile" onAction="#filestore" text="保存数据包" />
+                <MenuItem mnemonicParsing="false" onAction="#FindPassword" text="密码探测" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="帮助">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#handleAbout" text="关于" />
+              <MenuItem mnemonicParsing="false" fx:id="about" onAction="#handleAbout" text="关于" />
             </items>
           </Menu>
         </menus>

@@ -1,5 +1,7 @@
 package pro.soft.service;
 
+import com.sun.xml.internal.bind.v2.TODO;
+import com.sun.xml.internal.ws.api.message.Packet;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jnetpcap.Pcap;
@@ -9,6 +11,7 @@ import org.jnetpcap.packet.PcapPacketHandler;
 import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.lan.Ethernet;
 import org.jnetpcap.protocol.network.Ip4;
+import org.jnetpcap.protocol.tcpip.Http;
 import org.jnetpcap.protocol.tcpip.Tcp;
 import pro.soft.model.BarChartModel;
 import pro.soft.model.PacketColumnModel;
@@ -57,13 +60,13 @@ public class PacketCaptureService {
 
     //开启子线程去抓包
     public static void capturePacket(){
-        //TODO:开启多线程抓包，原始包需要清洗（MAC、IP...）后存入列表中[√]
-        //TODO:开启了子线程去抓包，怎么关闭呢？
+        //开启多线程抓包，原始包需要清洗（MAC、IP...）后存入列表中[√]
+        //开启了子线程去抓包，怎么关闭呢？
         ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
         singleThreadExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                System.out.println(Thread.currentThread().getName() + "多线程嘻嘻嘻");
+                System.out.println(Thread.currentThread().getName() + "多线程抓包开启");
                 PcapIf device = JnetpCap.getInstance().getCurrent();
                 int snaplen = 64 * 1024;
                 // Capture all packets, no trucation 不截断的捕获所有包
@@ -91,6 +94,12 @@ public class PacketCaptureService {
                         columnModel.setDesIp(PacketProcess.getDestIp(packet));
                         columnModel.setSrcport(String.valueOf(PacketProcess.getSrcPort(packet)));
                         columnModel.setDesport(String.valueOf(PacketProcess.getDesPort(packet)));
+                        if(PacketProcess.getProtocol(packet).equals("TCP")){
+                            columnModel.setTcpContent(PacketProcess.getTcpContents(packet));
+                        }
+                        if(PacketProcess.getProtocol(packet).equals("HTTP")){//如果是HTTP包，将其payload装入表格对象中暂存
+                            columnModel.setHttpContent(PacketProcess.getHttpContens(packet));
+                        }
                         PacketsInfoList.add(packet);//保存数据包的完整信息
                         packetColumnModelArrayList.add(columnModel);//保存tablecolumn信息
                         model.getTableList().add(columnModel);
@@ -197,6 +206,7 @@ public class PacketCaptureService {
                     FilterUDP(List,options,operator,nums);
                     break;
                 case "http":
+
                     break;
             }
 
@@ -367,4 +377,54 @@ public class PacketCaptureService {
         }
     }
 
+    //将完整数据包List处理为表格List
+    //用于离线数据包导入时是实时展现数据
+    public static void HandleDataFromWholeToColumn(){
+        for (PcapPacket packet:PacketsInfoList) {
+            PacketColumnModel columnModel = new PacketColumnModel();
+            columnModel.setId(PacketIndex++);
+            columnModel.setTime(TimeUtil.getLocalTime());
+            columnModel.setLength(String.valueOf(PacketProcess.getSize(packet)));
+            columnModel.setProtocol(PacketProcess.getProtocol(packet));
+            columnModel.setSrcMac(PacketProcess.getSrcMac(packet));
+            columnModel.setDesMac(PacketProcess.getDesMac(packet));
+            columnModel.setSrcIp(PacketProcess.getSrcIp(packet));
+            columnModel.setDesIp(PacketProcess.getDestIp(packet));
+            columnModel.setSrcport(String.valueOf(PacketProcess.getSrcPort(packet)));
+            columnModel.setDesport(String.valueOf(PacketProcess.getDesPort(packet)));
+            packetColumnModelArrayList.add(columnModel);//保存tablecolumn信息
+            model.getTableList().add(columnModel);
+            //统计流量包数量
+            GetNums(packet);
+        }
+    }
+    //探测存在密码的数据包
+    //DONE 2021/3/17  :完成探测用户密码功能实现
+    public static void SniffPwd(){
+        System.out.println("执行了SniffPwd");
+        ArrayList<PacketColumnModel> List = new ArrayList<>();
+        for (int i=0;i<model.getTableList().size();i++){
+            if(model.getTableList().get(i).getProtocol()=="HTTP"){
+                if (checkWords(model.getTableList().get(i).getHttpContent())) {
+                    List.add(model.getTableList().get(i));//探测到HTTP Content有密码，加入到List中
+                }
+            }else if (model.getTableList().get(i).getProtocol()=="TCP"){
+                if (checkWords(model.getTableList().get(i).getTcpContent())) {
+                    List.add(model.getTableList().get(i));//探测到TCP PAYLOAD中有密码，加入到List中
+                }
+            }
+        }
+        ObservableList<PacketColumnModel> tableList = FXCollections.observableList(List);
+        model.setTableList(tableList);
+    }
+    //供SniffPwd()调用，实现检测HTTP、TCP包中是否有Passwords等关键字
+    private static boolean checkWords(String content){
+        String dict[]={"passwords","pwd","password","passwd","wd","pass"};//存放检测可能含有密码的字典
+        for (String str:dict) {
+            if (content.toLowerCase().contains(str)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

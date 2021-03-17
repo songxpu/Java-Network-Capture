@@ -14,6 +14,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.jnetpcap.packet.PcapPacket;
+import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.tcpip.Http;
 import org.jnetpcap.protocol.tcpip.Tcp;
 import pro.soft.model.BarChartModel;
@@ -183,14 +184,14 @@ public class MainLayoutController implements Initializable {
     }
 
     //配置协议树
+    //TODO:需细分显示的情况。类似于ARP协议，仅是网络层协议，不应该显示传输层和应用层。
     private TreeItem configTreeView(PcapPacket pcapPacket){
         //根节点
         TreeItem rootItem = new TreeItem<>("协议结构");
         rootItem.setExpanded(true);
-
-        //链路层
+        //
         TreeItem treeItem = new TreeItem<>("以太网链路层");
-        treeItem.setExpanded(true);
+        treeItem.setExpanded(false);
         //
         TreeItem item_srcmac = new TreeItem<>("源网卡地址");
         item_srcmac.getChildren().add(new TreeItem<>(PacketProcess.getSrcMac(pcapPacket)));
@@ -204,7 +205,7 @@ public class MainLayoutController implements Initializable {
 
         //网络层
         TreeItem treeItem2 = new TreeItem<>("网络层");
-        treeItem2.setExpanded(true);
+        treeItem2.setExpanded(false);
         //
         TreeItem item_srcip = new TreeItem<>("源IP地址");
         item_srcip.getChildren().add(new TreeItem<>(PacketProcess.getSrcIp(pcapPacket)));
@@ -222,7 +223,7 @@ public class MainLayoutController implements Initializable {
         treeItem2.getChildren().add(item_descip);
         //传输层
         TreeItem treeItem3 = new TreeItem<>("传输层");
-        treeItem3.setExpanded(true);
+        treeItem3.setExpanded(false);
         TreeItem item_srcport = new TreeItem<>("源端口");
         item_srcport.getChildren().add(new TreeItem<>(PacketProcess.getSrcPort(pcapPacket)));
         item_srcport.setExpanded(true);
@@ -266,6 +267,10 @@ public class MainLayoutController implements Initializable {
         item_checknum.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Tcp()).checksum()));
         item_checknum.setExpanded(true);
 
+        TreeItem item_tcpdata = new TreeItem<>("TCP DATA");
+        item_tcpdata.getChildren().add(new TreeItem<>(new String(pcapPacket.getHeader(new Tcp()).getPayload())));
+        item_tcpdata.setExpanded(true);
+
         treeItem3.getChildren().add(item_srcport);
         treeItem3.getChildren().add(item_descport);
         treeItem3.getChildren().add(item_seqnum);
@@ -274,22 +279,43 @@ public class MainLayoutController implements Initializable {
         treeItem3.getChildren().add(item_flags);
         treeItem3.getChildren().add(item_windows);
         treeItem3.getChildren().add(item_checknum);
+        treeItem3.getChildren().add(item_tcpdata);
 
         //应用层
         TreeItem treeItem4 = new TreeItem<>("应用层");
-        treeItem4.setExpanded(true);
+        treeItem4.setExpanded(false);
         if (pcapPacket.getHeader(new Http())!=null) {
-            TreeItem item_header = new TreeItem<>("首部长度");
-            item_header.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Http()).getHeaderLength()));
+            TreeItem item_header = new TreeItem<>("Content-Length");
+            item_header.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Http()).getPayloadLength()));
             item_header.setExpanded(true);
-            treeItem4.getChildren().addAll(item_header);
-        }
 
+            TreeItem item_contens = new TreeItem<>("Http Data");
+            item_contens.getChildren().add(new TreeItem<>(new String(pcapPacket.getHeader(new Http()).getPayload())));
+            item_contens.setExpanded(true);
+
+            treeItem4.getChildren().addAll(item_header,item_contens);
+        }
 
         rootItem.getChildren().add(treeItem);
         rootItem.getChildren().add(treeItem2);
         rootItem.getChildren().add(treeItem3);
         rootItem.getChildren().add(treeItem4);
+        //密码探测
+        TreeItem treeItem5 = new TreeItem<>("密码探测");
+        treeItem5.setExpanded(true);
+        if (pcapPacket.getHeader(new Tcp())!=null) {
+            TreeItem item_contens = new TreeItem<>("TCP DATA");
+            item_contens.getChildren().add(new TreeItem<>(new String(pcapPacket.getHeader(new Tcp()).getPayload())));
+            item_contens.setExpanded(true);
+            treeItem5.getChildren().add(item_contens);
+        }
+        if (pcapPacket.getHeader(new Http())!=null) {
+            TreeItem item_contens = new TreeItem<>("HTTP DATA");
+            item_contens.getChildren().add(new TreeItem<>(new String(pcapPacket.getHeader(new Http()).getPayload())));
+            item_contens.setExpanded(true);
+            treeItem5.getChildren().add(item_contens);
+        }
+        rootItem.getChildren().add(treeItem5);
 
         return rootItem;
     }

@@ -17,8 +17,20 @@ public class PacketColumnModel {
     private SimpleStringProperty  srcport=new SimpleStringProperty();
     private SimpleStringProperty  desport=new SimpleStringProperty();
 
+    private String TcpContent;//FTP请求内容存放在TCP Payload中，用于存放此类信息。
+    private String HttpContent;
+
     public PacketColumnModel() {
     }
+
+    public String getTcpContent() {
+        return TcpContent;
+    }
+
+    public void setTcpContent(String tcpContent) {
+        TcpContent = tcpContent;
+    }
+
     public PacketColumnModel(int id, String time, String length, String protocol, String srcMac, String desMac, String srcIp, String desIp, String srcport, String desport) {
         this.id.set(id);
         this.time.set(time);
@@ -150,6 +162,14 @@ public class PacketColumnModel {
 
     public void setDesport(String desport) {
         this.desport.set(desport);
+    }
+
+    public void setHttpContent(String content){
+        HttpContent = content;
+    }
+
+    public String getHttpContent(){
+        return HttpContent;
     }
 
     @Override

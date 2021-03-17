@@ -98,7 +98,7 @@ public class DialogSelectInterfaceController implements Initializable {
         }
     }
     //网卡详细信息TreeView
-    //TODO:如何优雅的遍历出来？
+    //如何优雅的遍历出来？
     public TreeItem getDetail(PcapIf pcapIf){
         TreeItem treeItem = new TreeItem<>("网卡详细信息");
         treeItem.setExpanded(true);
