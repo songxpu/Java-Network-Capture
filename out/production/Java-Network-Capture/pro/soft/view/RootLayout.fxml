@@ -15,6 +15,8 @@
                 <MenuItem mnemonicParsing="false" onAction="#handleSelectInterface" text="选择监听网卡" />
                   <MenuItem fx:id="startCapture" disable="false" mnemonicParsing="false" onAction="#handleStartCapture" text="开始抓包" />
                   <MenuItem fx:id="stopCapture" disable="false" mnemonicParsing="false" onAction="#handleStopCapture" text="停止抓包" />
+                <MenuItem fx:id="clearAll" disable="false" mnemonicParsing="false" onAction="#handleClearAll" text="清空数据" />
+
 
             </items>
           </Menu>

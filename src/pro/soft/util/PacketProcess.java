@@ -11,6 +11,8 @@ import org.jnetpcap.protocol.tcpip.Http;
 import org.jnetpcap.protocol.tcpip.Tcp;
 import org.jnetpcap.protocol.tcpip.Udp;
 
+//清洗PcapPacket packet
+
 public class PacketProcess {
 
     private static Ethernet eth = new Ethernet();
@@ -100,7 +102,7 @@ public class PacketProcess {
         packet.getHeader(tcp);
         if(tcp.getPayloadLength()>0)
             return new String(tcp.getPayload());
-        return "NULL";
+        return "NULL";//直接返回null会导致空指针的情况
     }
 
 }

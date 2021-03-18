@@ -30,6 +30,7 @@ import sun.tools.jar.Main;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -64,6 +65,7 @@ public class RootLayoutController {
     }
 
     private MainLayoutController mainLayoutController;
+
 
     //选择网卡事件
     public void handleSelectInterface() throws IOException {
@@ -222,6 +224,19 @@ public class RootLayoutController {
     //探测用户密码
     public void FindPassword(){
         PacketCaptureService.SniffPwd();
+    }
+    //清空数据包
+    //TODO:清空时报空指针错误，但没有影响程序运行。
+    public void handleClearAll(){
+       if (PacketCaptureService.clearAll()){//true:清空成功
+            //依次重置右侧协议树和协议详细栏
+           mainLayoutController.clearInfo_tree();
+           mainLayoutController.clearText_packetInfo();
+           AlertDialog.getInstance().Info_Display("数据清空成功！");
+       }else{//清空失败
+           AlertDialog.getInstance().Error_Warning("数据清空失败！");
+       }
+
     }
 
 }
