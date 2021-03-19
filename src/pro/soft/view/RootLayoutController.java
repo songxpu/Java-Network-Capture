@@ -226,7 +226,7 @@ public class RootLayoutController {
         PacketCaptureService.SniffPwd();
     }
     //清空数据包
-    //TODO:清空时报空指针错误，但没有影响程序运行。
+    //DONE:清空时报空指针错误，但没有影响程序运行。
     public void handleClearAll(){
        if (PacketCaptureService.clearAll()){//true:清空成功
             //依次重置右侧协议树、协议详细栏、流量统计区域
