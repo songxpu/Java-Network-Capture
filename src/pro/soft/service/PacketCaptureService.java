@@ -446,9 +446,9 @@ public class PacketCaptureService {
             }catch (Exception e){
                 System.out.println(e);
             }
-
-            //重置主页详细栏和右侧协议树
-
+            //清空统计区域数据
+            BarChartModel.clearAll();
+            //重置主页详细栏和右侧协议树:在RootLayoutController中处理
             return true;
         }
         return false;

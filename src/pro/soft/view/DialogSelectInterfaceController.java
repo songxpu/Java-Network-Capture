@@ -88,14 +88,15 @@ public class DialogSelectInterfaceController implements Initializable {
     //DialogSelectInterfaceController初始化方法
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (JnetpCap.getInstance().getCurrent()==null){//未设置软件当前网卡信息
-            setSelectList();//显示选择栏选项
-        }else {//已经设置了当前网卡信息->直接默认显示
-            choiceBox.setItems(FXCollections.observableArrayList(JnetpCap.getInstance().getCurrent().getDescription()+" | "+JnetpCap.getInstance().getCurrent().getName()));
-            choiceBox.getSelectionModel().selectFirst();
-            TreeItem treeItem = getDetail(JnetpCap.getInstance().getCurrent());
-            treeView.setRoot(treeItem);
-        }
+        setSelectList();
+//        if (JnetpCap.getInstance().getCurrent()==null){//未设置软件当前网卡信息
+//            setSelectList();//显示选择栏选项
+//        }else {//已经设置了当前网卡信息->直接默认显示
+//            choiceBox.setItems(FXCollections.observableArrayList(JnetpCap.getInstance().getCurrent().getDescription()+" | "+JnetpCap.getInstance().getCurrent().getName()));
+//            choiceBox.getSelectionModel().selectFirst();
+//            TreeItem treeItem = getDetail(JnetpCap.getInstance().getCurrent());
+//            treeView.setRoot(treeItem);
+//        }
     }
     //网卡详细信息TreeView
     //如何优雅的遍历出来？

@@ -35,4 +35,7 @@ public class BarChartModel {
         list.add(String.valueOf(OtherNum));
         return list;
     }
+    public static void clearAll(){
+        HttpNum=0;TcpNum=0;UdpNum=0;IpNum=0;IcmpNum=0;ArpNum=0;OtherNum=0;
+    }
 }

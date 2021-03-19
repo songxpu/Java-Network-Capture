@@ -104,5 +104,12 @@ public class PacketProcess {
             return new String(tcp.getPayload());
         return "NULL";//直接返回null会导致空指针的情况
     }
-
+    //获取UDP数据包中的payload部分内容
+    public static String getUdpContens(PcapPacket packet){
+        Udp udp = new Udp();
+        packet.getHeader(udp);
+        if (udp.getPayloadLength()>0)
+            return new String(udp.getPayload());
+        return "NULL";
+    }
 }

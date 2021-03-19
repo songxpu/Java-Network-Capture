@@ -103,7 +103,16 @@ public class MainLayoutController implements Initializable {
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 PacketColumnModel model = (PacketColumnModel) newValue;
                 ArrayList<PcapPacket> packetsInfoList = PacketCaptureService.getPacketsInfoList();
-                text_packetInfo.setText(packetsInfoList.get(model.getId()).toString());
+                StringBuffer textContens = new StringBuffer("【数据包总览】\n"+packetsInfoList.get(model.getId()).toString()+"\n\n");
+                if (PacketProcess.getProtocol(packetsInfoList.get(model.getId())).equals("TCP")){//TCP
+                    textContens.append(new StringBuffer("【TCP数据包】\n"+PacketProcess.getTcpContents(packetsInfoList.get(model.getId()))+"\n\n"));
+                }else if (PacketProcess.getProtocol(packetsInfoList.get(model.getId())).equals("HTTP")){//HTTP
+                    textContens.append(new StringBuffer("【TCP数据包】\n"+PacketProcess.getTcpContents(packetsInfoList.get(model.getId()))+"\n\n"));
+                    textContens.append(new StringBuffer("【HTTP数据包】\n"+PacketProcess.getHttpContens(packetsInfoList.get(model.getId()))+"\n\n"));
+                } else if (PacketProcess.getProtocol(packetsInfoList.get(model.getId())).equals("UDP")){//UDP
+                    textContens.append(new StringBuffer("【UDP数据包】\n"+PacketProcess.getUdpContens(packetsInfoList.get(model.getId()))+"\n\n"));
+                }
+                text_packetInfo.setText(new String(textContens));
                 //更新协议树
                 TreeItem item = configTreeView(packetsInfoList.get(model.getId()));
                 info_tree.setRoot(item);
