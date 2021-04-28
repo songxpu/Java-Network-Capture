@@ -6,6 +6,7 @@ import org.jnetpcap.protocol.tcpip.Http;
 import org.jnetpcap.protocol.tcpip.Tcp;
 import org.jnetpcap.protocol.tcpip.Udp;
 import pro.soft.util.PacketProcess;
+import sun.reflect.generics.tree.Tree;
 
 //用于配置主页右栏"树型"信息
 public class TreeLabelConfig {
@@ -148,6 +149,22 @@ public class TreeLabelConfig {
             treeItem4.setExpanded(false);
             //若不是
             if (pcapPacket.getHeader(new Http())!=null) {
+                TreeItem item_method = new TreeItem<>("HTTP请求方式");
+                item_method.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Http()).fieldValue(Http.Request.RequestMethod)));
+                item_method.setExpanded(true);
+
+                TreeItem item_path = new TreeItem<>("HTTP请求路径");
+                item_path.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Http()).fieldValue(Http.Request.RequestUrl)));
+                item_path.setExpanded(true);
+
+                TreeItem item_Cookie = new TreeItem<>("Cookie");
+                item_Cookie.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Http()).fieldValue(Http.Request.Cookie)));
+                item_Cookie.setExpanded(true);
+
+                TreeItem item_User_Agent = new TreeItem<>("User-Agent");
+                item_User_Agent.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Http()).fieldValue(Http.Request.User_Agent)));
+                item_User_Agent.setExpanded(true);
+
                 TreeItem item_header = new TreeItem<>("数据长度");
                 item_header.getChildren().add(new TreeItem<>(pcapPacket.getHeader(new Http()).getPayloadLength()));
                 item_header.setExpanded(true);
@@ -156,7 +173,9 @@ public class TreeLabelConfig {
                 item_contens.getChildren().add(new TreeItem<>(new String(pcapPacket.getHeader(new Http()).getPayload())));
                 item_contens.setExpanded(false);
 
-                treeItem4.getChildren().addAll(item_header,item_contens);
+
+
+                treeItem4.getChildren().addAll(item_method,item_path,item_Cookie,item_User_Agent,item_header,item_contens);
                 rootItem.getChildren().add(treeItem4);
 
             }
