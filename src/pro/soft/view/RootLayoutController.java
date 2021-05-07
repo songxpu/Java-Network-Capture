@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
@@ -21,16 +20,12 @@ import org.jnetpcap.packet.PcapPacketHandler;
 import pro.soft.MainApp;
 import pro.soft.service.JnetpCap;
 import pro.soft.service.PacketCaptureService;
-import pro.soft.service.PacketDump;
 import pro.soft.util.AlertDialog;
-import pro.soft.util.Loading;
 import pro.soft.util.TimeUtil;
-import sun.tools.jar.Main;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -240,5 +235,22 @@ public class RootLayoutController {
 
     }
 
+    public void handleIPStatistics() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MainApp.class.getResource("view/IPStatisticsLayout.fxml"));
+        AnchorPane IPLayout = (AnchorPane) loader.load();
+        //创建弹出窗口的Stage
+        Stage aboutStage = new Stage();
+        aboutStage.setTitle("IP流量统计");
+        aboutStage.initModality(Modality.WINDOW_MODAL);
+        aboutStage.initOwner(mainApp.getPrimaryStage());//指定父窗口
+        Scene scene = new Scene(IPLayout);
+        aboutStage.setScene(scene);
+        //设置弹出窗口的控制器
+        IPStatisticsLayoutController controller = loader.getController();
+        controller.setIPStage(aboutStage);//将窗口Stage对象传给控制器
+        // 显示弹框并等待用户选择
+        aboutStage.showAndWait();
+    }
 }
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="340.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pro.soft.view.IPStatisticsLayoutController">
+   <children>
+      <BarChart fx:id="IPChart" layoutX="64.0" layoutY="32.0" prefHeight="277" prefWidth="440" AnchorPane.leftAnchor="32.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="0.0">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </BarChart>
+       <Button layoutX="140" layoutY="340" onAction="#updateBarchart" text="更新" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="180.0" />
+       <Button layoutX="140" layoutY="340" onAction="#closeChart" text="关闭" AnchorPane.bottomAnchor="35.0" AnchorPane.rightAnchor="180.0" />
+   </children>
+</AnchorPane>

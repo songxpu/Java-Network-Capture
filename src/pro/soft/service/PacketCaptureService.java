@@ -148,6 +148,8 @@ public class PacketCaptureService {
         return PacketsInfoList;
     }
 
+    public static ArrayList<PacketColumnModel> getPacketColumnModelArrayList(){return packetColumnModelArrayList;}
+
     //统计各类型数据包的数量
     public static void GetNums(PcapPacket pcapPacket) {
         String protocol = PacketProcess.getProtocol(pcapPacket);
